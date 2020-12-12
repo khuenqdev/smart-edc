@@ -1,0 +1,1 @@
+# SmartEDC Payment Terminal Connector
