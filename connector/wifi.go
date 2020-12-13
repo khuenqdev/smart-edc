@@ -56,27 +56,25 @@ func (c *WifiConnector) SendData(data string) ([]byte, error) {
 
     defer conn.Close()
 
-    for {
-        // Send data to payment terminal
-        fmt.Println("Writing data")
-        _, err = conn.Write([]byte(data))
+    // Send data to payment terminal
+    fmt.Println("Writing data")
+    _, err = conn.Write([]byte(data))
 
-        if nil != err {
-            fmt.Println("Failed!")
-            return nil, err
-        }
-
-        time.Sleep(10000)
-        response := make([]byte, 2048)
-        fmt.Println("Reading response")
-        _, err = conn.Read(response)
-
-        if nil != err {
-            fmt.Println("Failed!")
-            return nil, err
-        }
-
-        return response, nil
+    if nil != err {
+        fmt.Println("Failed!")
+        return nil, err
     }
+
+    time.Sleep(10000)
+    response := make([]byte, 2048)
+    fmt.Println("Reading response")
+    _, err = conn.Read(response)
+
+    if nil != err {
+        fmt.Println("Failed!")
+        return nil, err
+    }
+
+    return response, nil
 
 }
