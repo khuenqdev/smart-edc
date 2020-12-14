@@ -37,12 +37,13 @@ func (c *UsbConnector) SendData(data string) ([]byte, error) {
         return nil, status.Error(codes.Unavailable, "Cannot send data to terminal")
     }
 
-    buf := make([]byte, 2048)
+    var buf []byte
     fmt.Println("Reading response")
 
     for !validResponseData(buf) {
-        buf = make([]byte, 2048)
-        readLen, _ := s.Read(buf)
+        x := make([]byte, 2048)
+        readLen, _ := s.Read(x)
+        buf = append(buf, x...)
         fmt.Println("Read length", readLen)
         buf = bytes.Trim(buf, "\x00")
     }

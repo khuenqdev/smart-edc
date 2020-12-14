@@ -3,7 +3,6 @@ package connector
 import (
     "encoding/xml"
     "fmt"
-    "strings"
 )
 
 type CommonResponse struct {
@@ -23,10 +22,6 @@ func validResponseData(r []byte) bool {
     err := xml.Unmarshal(r, data)
 
     if nil != err {
-        if strings.Contains(err.Error(), "XML syntax error on line 1: expected element name after <") {
-            return true
-        }
-
         return false
     }
 
