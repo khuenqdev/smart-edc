@@ -10,6 +10,7 @@ import (
     "syscall"
     "time"
 
+    "github.com/gorilla/handlers"
     "github.com/gorilla/mux"
 
     "git02.smartosc.com/production/smartedc-connector/smartedc"
@@ -40,11 +41,8 @@ func httpServer() {
     //r.HandleFunc("/payment/e-wallet/status", srv.HandleEWalletStatus)
 
     s := &http.Server{
-        Handler:      r,
-        Addr:         defaultGrpcAddress,
-        IdleTimeout:  60 * time.Second,
-        ReadTimeout:  15 * time.Second,
-        WriteTimeout: 15 * time.Second,
+        Handler: handlers.CORS()(r),
+        Addr:    defaultGrpcAddress,
     }
 
     go func() {

@@ -3,9 +3,10 @@ package smartedc
 import (
     "encoding/xml"
     "fmt"
+    "strings"
 )
 
-func buildRequestData(r interface{}) (string, error) {
+func BuildRequestData(r interface{}) (string, error) {
     requestData, err := xml.Marshal(r)
 
     if nil != err {
@@ -15,8 +16,15 @@ func buildRequestData(r interface{}) (string, error) {
     return string(requestData), nil
 }
 
-func prepareResponseData(r []byte, output interface{}) (interface{}, error) {
+func PrepareResponseData(r []byte, output interface{}) (interface{}, error) {
     err := xml.Unmarshal(r, output)
+
+    if nil != err && strings.Contains(err.Error(), "XML syntax error on line 1: expected element name after <") {
+        x := []byte("<")
+        x = append(x, r...)
+        err = xml.Unmarshal(x, output)
+    }
+
     return output, err
 }
 

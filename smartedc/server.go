@@ -26,6 +26,7 @@ func (s *SmartEdcServer) HandleTerminalTest(w http.ResponseWriter, r *http.Reque
 }
 
 func (s *SmartEdcServer) HandleCreditCardPayment(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
     reqBody, _ := ioutil.ReadAll(r.Body)
     request := &CreditCardPaymentRequest{}
     terminalResponse := make([]byte, 2048)
@@ -43,7 +44,7 @@ func (s *SmartEdcServer) HandleCreditCardPayment(w http.ResponseWriter, r *http.
         return
     }
 
-    requestData, err := buildRequestData(request)
+    requestData, err := BuildRequestData(request)
 
     if nil != err {
         _ = jsonEncoder.Encode(createCreditCardErrorResponse(request, err, "Cannot convert credit card request to XML"))
@@ -71,7 +72,7 @@ func (s *SmartEdcServer) HandleCreditCardPayment(w http.ResponseWriter, r *http.
     }
 
     fmt.Println("Data successfully sent to the payment terminal")
-    resp, err := prepareResponseData(terminalResponse, &CreditCardPaymentResponse{})
+    resp, err := PrepareResponseData(terminalResponse, &CreditCardPaymentResponse{})
 
     if nil != err {
         _ = jsonEncoder.Encode(createCreditCardErrorResponse(request, err, "Error when handling credit card payment response"))
@@ -87,6 +88,7 @@ func (s *SmartEdcServer) HandleCreditCardPayment(w http.ResponseWriter, r *http.
 }
 
 func (s *SmartEdcServer) HandleEWalletPayment(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
     reqBody, _ := ioutil.ReadAll(r.Body)
     request := &EWalletPaymentRequest{}
     terminalResponse := make([]byte, 2048)
@@ -104,7 +106,7 @@ func (s *SmartEdcServer) HandleEWalletPayment(w http.ResponseWriter, r *http.Req
         return
     }
 
-    requestData, err := buildRequestData(request)
+    requestData, err := BuildRequestData(request)
 
     if nil != err {
         _ = jsonEncoder.Encode(createEWalletErrorResponse(request, err, "Cannot convert credit card request to XML"))
@@ -132,7 +134,7 @@ func (s *SmartEdcServer) HandleEWalletPayment(w http.ResponseWriter, r *http.Req
     }
 
     fmt.Println("Data successfully sent to the payment terminal")
-    resp, err := prepareResponseData(terminalResponse, &EWalletPaymentResponse{})
+    resp, err := PrepareResponseData(terminalResponse, &EWalletPaymentResponse{})
 
     if nil != err {
         _ = jsonEncoder.Encode(createEWalletErrorResponse(request, err, "Error when handling e-wallet payment response"))

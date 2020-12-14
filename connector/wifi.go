@@ -1,9 +1,9 @@
 package connector
 
 import (
+    "bytes"
     "fmt"
     "net"
-    "time"
 )
 
 const (
@@ -42,19 +42,19 @@ func (c *WifiConnector) SendData(data string) ([]byte, error) {
     address := fmt.Sprintf("%s:%s", c.Host, c.Port)
     fmt.Println("Dialing", address)
 
-    conn, err := net.DialTimeout(c.Protocol, address, 10000000)
+    tcpAddr, err := net.ResolveTCPAddr("tcp", address)
+
+    if err != nil {
+        fmt.Println("Resolve TCP Address failed:", err.Error())
+        return nil, err
+    }
+
+    conn, err := net.DialTCP(c.Protocol, nil, tcpAddr)
 
     if nil != err {
         fmt.Println("Failed!")
         return nil, err
     }
-
-    if err = conn.SetReadDeadline(time.Now().Add(10 * time.Second)); nil != err {
-        fmt.Println("Failed!")
-        return nil, err
-    }
-
-    defer conn.Close()
 
     // Send data to payment terminal
     fmt.Println("Writing data")
@@ -65,16 +65,21 @@ func (c *WifiConnector) SendData(data string) ([]byte, error) {
         return nil, err
     }
 
-    time.Sleep(10000)
     response := make([]byte, 2048)
     fmt.Println("Reading response")
-    _, err = conn.Read(response)
+
+    for !validResponseData(response) {
+        response = make([]byte, 2048)
+        readLen, _ := conn.Read(response)
+        response = bytes.Trim(response, "\x00")
+        fmt.Println("Read length", readLen)
+    }
+
+    err = conn.Close()
 
     if nil != err {
-        fmt.Println("Failed!")
         return nil, err
     }
 
     return response, nil
-
 }

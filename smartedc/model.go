@@ -16,12 +16,12 @@ type CommonRequest struct {
 
 type CommonResponse struct {
     XMLName      xml.Name `json:"-" xml:"xml"`
-    PosRefNo     string   `json:"pos_ref_no,omitempty" xml:"pos_ref_no,omitempty"`
-    ResponseCode string   `json:"response_code,omitempty" xml:"response_code,omitempty"`
-    ResponseMsg  string   `json:"response_msg,omitempty" xml:"response_msg,omitempty"`
-    InvoiceNo    string   `json:"invoice_no,omitempty" xml:"invoice_no,omitempty"`
-    Amount       float64  `json:"amount,omitempty" xml:"amount,omitempty"`
-    ErrorMessage string   `json:"error_message,omitempty" xml:"error_message,omitempty"`
+    PosRefNo     string   `json:"pos_ref_no" xml:"pos_ref_no,omitempty"`
+    ResponseCode string   `json:"response_code" xml:"response_code,omitempty"`
+    ResponseMsg  string   `json:"response_msg" xml:"response_msg,omitempty"`
+    InvoiceNo    string   `json:"invoice_no" xml:"invoice_no,omitempty"`
+    Amount       float64  `json:"amount" xml:"amount,omitempty"`
+    ErrorMessage string   `json:"error_message" xml:"error_message,omitempty"`
 }
 
 type EWalletPaymentRequest struct {
@@ -31,7 +31,7 @@ type EWalletPaymentRequest struct {
 
 type EWalletPaymentResponse struct {
     CommonResponse
-    TransactionId string `json:"transaction_id,omitempty" xml:"transaction_id,omitempty"`
+    TransactionId string `json:"transaction_id" xml:"transaction_id,omitempty"`
 }
 
 type CreditCardPaymentRequest struct {
@@ -40,8 +40,8 @@ type CreditCardPaymentRequest struct {
 
 type CreditCardPaymentResponse struct {
     CommonResponse
-    CardNo           string `json:"card_no,omitempty" xml:"card_no,omitempty"`
-    CardApprovalCode string `json:"card_approval_code,omitempty" xml:"card_approval_code,omitempty"`
+    CardNo           string `json:"card_no" xml:"card_no,omitempty"`
+    CardApprovalCode string `json:"card_approval_code" xml:"card_approval_code,omitempty"`
 }
 
 type QueryEWalletPaymentStatusRequest struct {
@@ -51,7 +51,7 @@ type QueryEWalletPaymentStatusRequest struct {
 
 type QueryEWalletPaymentStatusResponse struct {
     CommonResponse
-    TransactionId string `json:"transaction_id,omitempty" xml:"transaction_id,omitempty"`
+    TransactionId string `json:"transaction_id" xml:"transaction_id,omitempty"`
 }
 
 type VoidEWalletPaymentRequest struct {
@@ -61,7 +61,7 @@ type VoidEWalletPaymentRequest struct {
 
 type VoidEWalletPaymentResponse struct {
     CommonResponse
-    TransactionId string `json:"transaction_id,omitempty" xml:"transaction_id,omitempty"`
+    TransactionId string `json:"transaction_id" xml:"transaction_id,omitempty"`
 }
 
 type VoidCreditCardPaymentRequest struct {
