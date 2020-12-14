@@ -10,8 +10,7 @@ import (
     "syscall"
     "time"
 
-    "github.com/gorilla/handlers"
-    "github.com/gorilla/mux"
+    "github.com/rs/cors"
 
     "git02.smartosc.com/production/smartedc-connector/smartedc"
 )
@@ -31,17 +30,13 @@ func httpServer() {
     srv := smartedc.NewSmartEdcServer()
 
     // Routes
-    r := mux.NewRouter()
-    r.Use(commonMiddleware)
-    r.HandleFunc("/", srv.HandleTerminalTest)
-    r.HandleFunc("/payment/e-wallet/pay", srv.HandleEWalletPayment).Methods("POST")
-    r.HandleFunc("/payment/credit-card/pay", srv.HandleCreditCardPayment).Methods("POST")
-    //r.HandleFunc("/payment/e-wallet/void", srv.HandleEWalletVoid)
-    //r.HandleFunc("/payment/credit-card/void", srv.HandleCreditCardVoid)
-    //r.HandleFunc("/payment/e-wallet/status", srv.HandleEWalletStatus)
+    mux := http.NewServeMux()
+    mux.HandleFunc("/", srv.HandleTerminalTest)
+    mux.HandleFunc("/payment/e-wallet/pay", srv.HandleEWalletPayment)
+    mux.HandleFunc("/payment/credit-card/pay", srv.HandleCreditCardPayment)
 
     s := &http.Server{
-        Handler: handlers.CORS()(r),
+        Handler: cors.AllowAll().Handler(mux),
         Addr:    defaultGrpcAddress,
     }
 
@@ -60,11 +55,4 @@ func httpServer() {
     }
     defer cancel()
     log.Printf("exit %e", <-errChan)
-}
-
-func commonMiddleware(next http.Handler) http.Handler {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        w.Header().Add("Content-Type", "application/json")
-        next.ServeHTTP(w, r)
-    })
 }

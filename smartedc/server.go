@@ -26,7 +26,7 @@ func (s *SmartEdcServer) HandleTerminalTest(w http.ResponseWriter, r *http.Reque
 }
 
 func (s *SmartEdcServer) HandleCreditCardPayment(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "application/json")
+    w.Header().Add("Content-Type", "application/json")
     reqBody, _ := ioutil.ReadAll(r.Body)
     request := &CreditCardPaymentRequest{}
     terminalResponse := make([]byte, 2048)
@@ -88,7 +88,7 @@ func (s *SmartEdcServer) HandleCreditCardPayment(w http.ResponseWriter, r *http.
 }
 
 func (s *SmartEdcServer) HandleEWalletPayment(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "application/json")
+    w.Header().Add("Content-Type", "application/json")
     reqBody, _ := ioutil.ReadAll(r.Body)
     request := &EWalletPaymentRequest{}
     terminalResponse := make([]byte, 2048)
