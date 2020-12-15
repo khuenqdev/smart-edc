@@ -42,7 +42,12 @@ func (c *UsbConnector) SendData(data string) ([]byte, error) {
 
     for !validResponseData(buf) {
         x := make([]byte, 2048)
-        readLen, _ := s.Read(x)
+        readLen, err := s.Read(x)
+
+        if nil != err {
+            return nil, status.Error(codes.Unavailable, "Cannot read data from terminal")
+        }
+
         buf = append(buf, x...)
         fmt.Println("Read length", readLen)
         buf = bytes.Trim(buf, "\x00")
@@ -86,10 +91,20 @@ func getPortList() []string {
         "COM3",
         "COM4",
         "COM5",
+        "COM6",
+        "COM7",
+        "COM8",
+        "COM9",
+        "COM10",
         "/dev/ttyACM0",
         "/dev/ttyACM1",
         "/dev/ttyACM2",
         "/dev/ttyACM3",
         "/dev/ttyACM4",
+        "/dev/ttyACM5",
+        "/dev/ttyACM6",
+        "/dev/ttyACM7",
+        "/dev/ttyACM8",
+        "/dev/ttyACM9",
     }
 }

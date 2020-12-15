@@ -65,6 +65,8 @@ func (c *WifiConnector) SendData(data string) ([]byte, error) {
         return nil, err
     }
 
+    _ = conn.CloseWrite()
+
     response := make([]byte, 2048)
     fmt.Println("Reading response")
 
