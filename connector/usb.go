@@ -6,6 +6,8 @@ import (
     "github.com/tarm/serial"
     "google.golang.org/grpc/codes"
     "google.golang.org/grpc/status"
+    "io/ioutil"
+    "strings"
 )
 
 const defaultSerialPort = "COM1"
@@ -85,7 +87,8 @@ func checkPorts() *serial.Port {
 }
 
 func getPortList() []string {
-    return []string{
+    var portNames []string
+    windowsPorts := []string{
         "COM1",
         "COM2",
         "COM3",
@@ -96,21 +99,22 @@ func getPortList() []string {
         "COM8",
         "COM9",
         "COM10",
-        "/dev/ttyACM0",
-        "/dev/ttyACM1",
-        "/dev/ttyACM2",
-        "/dev/ttyACM3",
-        "/dev/ttyACM4",
-        "/dev/ttyACM5",
-        "/dev/ttyACM6",
-        "/dev/ttyACM7",
-        "/dev/ttyACM8",
-        "/dev/ttyACM9",
-        "/dev/cu.usbserial0",
-        "/dev/cu.usbserial1",
-        "/dev/cu.usbserial2",
-        "/dev/cu.usbserial3",
-        "/dev/cu.usbserial4",
-        "/dev/cu.usbserial5",
     }
+
+    portNames = append(portNames, windowsPorts...)
+
+    files, err := ioutil.ReadDir("/dev")
+
+    if err != nil {
+        return portNames
+    }
+
+    for _, file := range files {
+        if strings.Contains(file.Name(), "ttyACM") || strings.Contains(file.Name(), "tty.usbmodem") {
+            fmt.Println(file.Name())
+            portNames = append(portNames, "/dev/" + file.Name())
+        }
+    }
+
+    return portNames
 }
