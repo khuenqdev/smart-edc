@@ -106,5 +106,11 @@ func getPortList() []string {
         "/dev/ttyACM7",
         "/dev/ttyACM8",
         "/dev/ttyACM9",
+        "/dev/cu.usbserial0",
+        "/dev/cu.usbserial1",
+        "/dev/cu.usbserial2",
+        "/dev/cu.usbserial3",
+        "/dev/cu.usbserial4",
+        "/dev/cu.usbserial5",
     }
 }
